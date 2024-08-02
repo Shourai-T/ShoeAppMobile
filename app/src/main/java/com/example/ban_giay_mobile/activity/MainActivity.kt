@@ -2,18 +2,15 @@ package com.example.ban_giay_mobile.activity
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.ban_giay_mobile.Model.SliderModel
-import com.example.ban_giay_mobile.R
-import com.example.ban_giay_mobile.SliderAdapter
+import com.example.ban_giay_mobile.adapter.SliderAdapter
 import com.example.ban_giay_mobile.ViewModel.MainViewModel
+import com.example.ban_giay_mobile.adapter.BrandAdapter
 import com.example.ban_giay_mobile.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity() {
@@ -24,11 +21,12 @@ class MainActivity : BaseActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initBanner()
+        initBrand()
     }
 
     private fun initBanner() {
         binding.progressBarBanner.visibility = View.VISIBLE
-        viewModel.banner.observe(this, Observer { items->
+        viewModel.banners.observe(this, Observer { items->
             banners(items)
             binding.progressBarBanner.visibility = View.GONE
         })
@@ -50,5 +48,23 @@ class MainActivity : BaseActivity() {
         }
 
 
+    }
+    private fun initBrand() {
+        binding.progressBarBrand.visibility = View.VISIBLE
+        viewModel.brands.observe(this, Observer { items->
+            binding.viewBrand.layoutManager= LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+            binding.viewBrand.adapter= BrandAdapter(items)
+            binding.progressBarBrand.visibility = View.GONE
+        })
+        viewModel.loadBrand()
+    }
+    private fun initPopular() {
+        binding.progressBarPopular.visibility = View.VISIBLE
+        viewModel.brands.observe(this, Observer { items->
+            binding.viewBrand.layoutManager= LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+            binding.viewBrand.adapter= BrandAdapter(items)
+            binding.progressBarBrand.visibility = View.GONE
+        })
+        viewModel.loadBrand()
     }
 }

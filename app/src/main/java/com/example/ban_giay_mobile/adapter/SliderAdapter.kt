@@ -1,15 +1,14 @@
-package com.example.ban_giay_mobile
+package com.example.ban_giay_mobile.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Recycler
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ban_giay_mobile.Model.SliderModel
+import com.example.ban_giay_mobile.R
 import com.google.ai.client.generativeai.common.RequestOptions
 
 class SliderAdapter (private  var sliderItems:List<SliderModel>, private val viewPager2: ViewPager2):RecyclerView.Adapter<SliderAdapter.SliderViewHolder>(){
