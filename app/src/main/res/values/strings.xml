@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Ban_giay_mobile</string>
+    <string name="intro_title">Step into your <font color="#6033ba"> style\n A world of shoes</font></string>
+    <string name="intro_text">Browse the latest styles from top brands\n Get personalized recommendations\n Enjoy fast, free shipping</string>
+    <string name="intro_signin">Already have an account? <font color="#6033ba">Sign in</font></string>
+</resources>
