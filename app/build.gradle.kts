@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -37,6 +38,9 @@ android {
         viewBinding = true
 
     }
+    viewBinding {
+        enable = true
+    }
 }
 
 dependencies {
@@ -58,4 +62,8 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.dotsindicator)
     implementation(libs.gson)
+
+    implementation (libs.glide)
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
 }

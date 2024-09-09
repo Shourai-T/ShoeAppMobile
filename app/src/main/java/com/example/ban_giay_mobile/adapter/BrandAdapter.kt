@@ -8,11 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.ban_giay_mobile.Model.BrandModel
 import com.example.ban_giay_mobile.R
 import com.example.ban_giay_mobile.databinding.ViewholderBrandBinding
 
-class BrandAdapter(val items:MutableList<BrandModel>):RecyclerView.Adapter<BrandAdapter.ViewHolder>() {
+class BrandAdapter(
+    private val items: List<BrandModel>,
+    private val onBrandSelected: (BrandModel?) -> Unit
+    ):RecyclerView.Adapter<BrandAdapter.ViewHolder>() {
     private  var selectedPosition = -1
     private var lastSelectedPosition = -1
     private  lateinit var context: Context
@@ -29,28 +33,70 @@ class BrandAdapter(val items:MutableList<BrandModel>):RecyclerView.Adapter<Brand
     override fun getItemCount(): Int = items.size
 
     @SuppressLint("ResourceAsColor")
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, @SuppressLint("RecyclerView") position: Int) {
         val item = items[position]
         holder.binding.title.text = item.title
         Glide.with(holder.itemView.context).load(item.picUrl).into(holder.binding.pic)
+
+        // Set up click listener
         holder.binding.root.setOnClickListener {
-            selectedPosition = position
-            notifyItemChanged(selectedPosition)
-            notifyItemChanged(lastSelectedPosition)
-            lastSelectedPosition = selectedPosition
+            if (selectedPosition == position) {
+                // Deselect if the same brand is clicked again
+                selectedPosition = -1
+                onBrandSelected(null) // Notify activity to show all products
+                holder.binding.pic.setBackgroundResource(R.drawable.grey_bg)
+                holder.binding.mailLayout.setBackgroundColor(0)
+                ImageViewCompat.setImageTintList(holder.binding.pic, ColorStateList.valueOf(context.getColor(R.color.black)))
+                holder.binding.title.visibility = View.GONE
+            } else {
+                // Select a new brand
+                val previousPosition = selectedPosition
+                selectedPosition = position
+                notifyItemChanged(selectedPosition)
+                if (previousPosition != -1) {
+                    notifyItemChanged(previousPosition)
+                }
+                onBrandSelected(item) // Notify activity to filter products by selected brand
+            }
         }
         holder.binding.title.setTextColor(context.resources.getColor(R.color.white))
         if (selectedPosition == position) {
             holder.binding.pic.setBackgroundResource(0)
-            holder.binding.mailLayout.setBackgroundColor(R.color.purple)
+            holder.binding.mailLayout.setBackgroundResource(R.drawable.reg_bg)
             ImageViewCompat.setImageTintList(holder.binding.pic, ColorStateList.valueOf(context.getColor(R.color.white)))
             holder.binding.title.visibility = View.VISIBLE
         } else {
-            holder.binding.mailLayout.setBackgroundResource(R.color.grey)
-            holder.binding.pic.setBackgroundColor(0)
+            holder.binding.pic.setBackgroundResource(R.drawable.grey_bg)
+            holder.binding.mailLayout.setBackgroundColor(0)
             ImageViewCompat.setImageTintList(holder.binding.pic, ColorStateList.valueOf(context.getColor(R.color.black)))
             holder.binding.title.visibility = View.GONE
         }
     }
+
+//    @SuppressLint("ResourceAsColor")
+//    override fun onBindViewHolder(holder: ViewHolder, @SuppressLint("RecyclerView") position: Int) {
+//        val item = items[position]
+//        holder.binding.title.text = item.title
+//        Glide.with(holder.itemView.context).load(item.picUrl).into(holder.binding.pic)
+//        holder.binding.root.setOnClickListener {
+//            selectedPosition = position
+//            notifyItemChanged(selectedPosition)
+//            notifyItemChanged(lastSelectedPosition)
+//            lastSelectedPosition = selectedPosition
+//            onBrandSelected(item)
+//        }
+//        holder.binding.title.setTextColor(context.resources.getColor(R.color.white))
+//        if (selectedPosition == position) {
+//            holder.binding.pic.setBackgroundResource(0)
+//            holder.binding.mailLayout.setBackgroundResource(R.drawable.reg_bg)
+//            ImageViewCompat.setImageTintList(holder.binding.pic, ColorStateList.valueOf(context.getColor(R.color.white)))
+//            holder.binding.title.visibility = View.VISIBLE
+//        } else {
+//            holder.binding.pic.setBackgroundResource(R.drawable.grey_bg)
+//            holder.binding.mailLayout.setBackgroundColor(0)
+//            ImageViewCompat.setImageTintList(holder.binding.pic, ColorStateList.valueOf(context.getColor(R.color.black)))
+//            holder.binding.title.visibility = View.GONE
+//        }
+//    }
 
 }
